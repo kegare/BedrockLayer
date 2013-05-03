@@ -12,7 +12,7 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
-@Mod(modid = "BedrockLayer", name = "BedrockLayer", version = "1.0.1")
+@Mod(modid = "BedrockLayer", name = "BedrockLayer", version = "1.0.2")
 @NetworkMod(clientSideRequired = false, serverSideRequired = false)
 public class BedrockLayer
 {
@@ -22,7 +22,7 @@ public class BedrockLayer
 	@Init
 	public void init(FMLInitializationEvent event)
 	{
-		MinecraftForge.EVENT_BUS.register(BedrockLayer.instance);
+		MinecraftForge.EVENT_BUS.register(instance);
 	}
 
 	@ForgeSubscribe
@@ -39,16 +39,14 @@ public class BedrockLayer
 				{
 					for (int z = 0; z < 16; ++z)
 					{
-						if (chunk.getBlockID(x, 0, z) != Block.bedrock.blockID)
+						if (chunk.getBlockID(x, 0, z) == Block.bedrock.blockID)
 						{
-							chunk.setBlockIDWithMetadata(x, 0, z, Block.bedrock.blockID, 0);
-						}
-
-						for (int y = 1; y <= 5; ++y)
-						{
-							if (chunk.getBlockID(x, y, z) == Block.bedrock.blockID)
+							for (int y = 1; y <= 5; ++y)
 							{
-								chunk.setBlockIDWithMetadata(x, y, z, Block.stone.blockID, 0);
+								if (chunk.getBlockID(x, y, z) == Block.bedrock.blockID)
+								{
+									chunk.setBlockIDWithMetadata(x, y, z, Block.stone.blockID, 0);
+								}
 							}
 						}
 					}
@@ -60,26 +58,24 @@ public class BedrockLayer
 				{
 					for (int z = 0; z < 16; ++z)
 					{
-						if (chunk.getBlockID(x, 0, z) != Block.bedrock.blockID)
+						if (chunk.getBlockID(x, 0, z) == Block.bedrock.blockID)
 						{
-							chunk.setBlockIDWithMetadata(x, 0, z, Block.bedrock.blockID, 0);
-						}
-
-						if (chunk.getBlockID(x, 128, z) != Block.bedrock.blockID)
-						{
-							chunk.setBlockIDWithMetadata(x, 128, z, Block.bedrock.blockID, 0);
-						}
-
-						for (int y = 1; y <= 5; ++y)
-						{
-							if (chunk.getBlockID(x, y, z) == Block.bedrock.blockID)
+							for (int y = 1; y <= 5; ++y)
 							{
-								chunk.setBlockIDWithMetadata(x, y, z, Block.netherrack.blockID, 0);
+								if (chunk.getBlockID(x, y, z) == Block.bedrock.blockID)
+								{
+									chunk.setBlockIDWithMetadata(x, y, z, Block.netherrack.blockID, 0);
+								}
 							}
-
-							if (chunk.getBlockID(x, 128 - y, z) == Block.bedrock.blockID)
+						}
+						else if (chunk.getBlockID(x, 128, z) == Block.bedrock.blockID)
+						{
+							for (int y = 1; y <= 5; ++y)
 							{
-								chunk.setBlockIDWithMetadata(x, 128 - y, z, Block.netherrack.blockID, 0);
+								if (chunk.getBlockID(x, 128 - y, z) == Block.bedrock.blockID)
+								{
+									chunk.setBlockIDWithMetadata(x, 128 - y, z, Block.netherrack.blockID, 0);
+								}
 							}
 						}
 					}
