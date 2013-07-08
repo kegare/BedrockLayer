@@ -1,5 +1,8 @@
 package bedrocklayer;
 
+import java.net.URL;
+import java.util.Properties;
+
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -8,6 +11,7 @@ import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.ChunkEvent;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
@@ -26,12 +30,27 @@ import cpw.mods.fml.common.network.NetworkMod;
 )
 public class BedrockLayer
 {
-	static final String version = "1.0.3";
+	static final String version = "1.0.4";
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		event.getModMetadata().version = version;
+		try
+		{
+			URL url = new URL("https://dl.dropbox.com/u/51943112/kegare/kegare.info");
+			Properties mappings = new Properties();
+
+			mappings.load(url.openConnection().getInputStream());
+
+			ModMetadata metadata = event.getModMetadata();
+			metadata.version = version;
+			metadata.description += " (Latest: " + mappings.getProperty("bedrocklayer.latest", version) + ")";
+			metadata.url = mappings.getProperty("bedrocklayer.url", metadata.url);
+		}
+		catch (Exception e)
+		{
+			return;
+		}
 	}
 
 	@EventHandler
