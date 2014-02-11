@@ -1,16 +1,14 @@
-package kegare.bedrocklayer;
+package com.kegare.bedrocklayer;
 
 import java.io.File;
 import java.util.Set;
 
-import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.EventPriority;
-import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
@@ -20,17 +18,10 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-@Mod
-(
-	modid = "kegare.bedrocklayer"
-)
-@NetworkMod
-(
-	clientSideRequired = false,
-	serverSideRequired = false
-)
+@Mod(modid = "kegare.bedrocklayer")
 public class BedrockLayer
 {
 	private static boolean overworld;
@@ -75,7 +66,7 @@ public class BedrockLayer
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
-	@ForgeSubscribe(priority = EventPriority.HIGHEST)
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onChunkLoad(ChunkEvent.Load event)
 	{
 		World world = event.world;
@@ -84,17 +75,17 @@ public class BedrockLayer
 
 		if (!world.isRemote && chunk.isChunkLoaded)
 		{
-			if (overworld && world.provider.dimensionId == 0 && (useLayeredCache ? !layeredChunks.contains(chunkSeed) : true))
+			if (overworld && world.provider.dimensionId == 0 && (!useLayeredCache || !layeredChunks.contains(chunkSeed)))
 			{
 				for (int x = 0; x < 16; ++x)
 				{
 					for (int z = 0; z < 16; ++z)
 					{
-						for (int y = 1; chunk.getBlockID(x, 0, z) == Block.bedrock.blockID && y < 5; ++y)
+						for (int y = 1; chunk.getBlock(x, 0, z) == Blocks.bedrock && y < 5; ++y)
 						{
-							if (chunk.getBlockID(x, y, z) == Block.bedrock.blockID)
+							if (chunk.getBlock(x, y, z) == Blocks.bedrock)
 							{
-								chunk.setBlockIDWithMetadata(x, y, z, Block.stone.blockID, 0);
+								chunk.func_150807_a(x, y, z, Blocks.stone, 0);
 							}
 						}
 					}
@@ -103,25 +94,25 @@ public class BedrockLayer
 				if (useLayeredCache) layeredChunks.add(chunkSeed);
 			}
 
-			if ((netherUpper || netherLower) && world.provider.dimensionId == -1 && (useLayeredCache ? !netherLayeredChunks.contains(chunkSeed) : true))
+			if ((netherUpper || netherLower) && world.provider.dimensionId == -1 && (!useLayeredCache || !netherLayeredChunks.contains(chunkSeed)))
 			{
 				for (int x = 0; x < 16; ++x)
 				{
 					for (int z = 0; z < 16; ++z)
 					{
-						for (int y = 1; netherUpper && chunk.getBlockID(x, 0, z) == Block.bedrock.blockID && y < 5; ++y)
+						for (int y = 1; netherUpper && chunk.getBlock(x, 0, z) == Blocks.bedrock && y < 5; ++y)
 						{
-							if (chunk.getBlockID(x, y, z) == Block.bedrock.blockID)
+							if (chunk.getBlock(x, y, z) == Blocks.bedrock)
 							{
-								chunk.setBlockIDWithMetadata(x, y, z, Block.netherrack.blockID, 0);
+								chunk.func_150807_a(x, y, z, Blocks.netherrack, 0);
 							}
 						}
 
-						for (int y = 126; netherLower && chunk.getBlockID(x, 127, z) == Block.bedrock.blockID && y > 122; --y)
+						for (int y = 126; netherLower && chunk.getBlock(x, 127, z) == Blocks.bedrock && y > 122; --y)
 						{
-							if (chunk.getBlockID(x, y, z) == Block.bedrock.blockID)
+							if (chunk.getBlock(x, y, z) == Blocks.bedrock)
 							{
-								chunk.setBlockIDWithMetadata(x, y, z, Block.netherrack.blockID, 0);
+								chunk.func_150807_a(x, y, z, Blocks.netherrack, 0);
 							}
 						}
 					}
@@ -132,7 +123,7 @@ public class BedrockLayer
 		}
 	}
 
-	@ForgeSubscribe(priority = EventPriority.HIGH)
+	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void onWorldUnload(WorldEvent.Unload event)
 	{
 		World world = event.world;
