@@ -10,18 +10,21 @@
 
 package com.kegare.bedrocklayer.core;
 
+import java.util.Map;
+
+import net.minecraftforge.common.MinecraftForge;
+
 import com.kegare.bedrocklayer.handler.BedrockEventHooks;
+
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.common.MinecraftForge;
+import cpw.mods.fml.common.network.NetworkCheckHandler;
+import cpw.mods.fml.relauncher.Side;
 
-@Mod
-(
-	modid = "kegare.bedrocklayer"
-)
+@Mod(modid = "kegare.bedrocklayer")
 public class BedrockLayer
 {
 	@EventHandler
@@ -40,5 +43,11 @@ public class BedrockLayer
 	public void onServerStarting(FMLServerStartingEvent event)
 	{
 		BedrockEventHooks.layeredChunks.clear();
+	}
+
+	@NetworkCheckHandler
+	public boolean netCheckHandler(Map<String, String> mods, Side side)
+	{
+		return true;
 	}
 }

@@ -10,10 +10,8 @@
 
 package com.kegare.bedrocklayer.handler;
 
-import com.google.common.collect.Sets;
-import com.kegare.bedrocklayer.core.Config;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import java.util.Set;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
@@ -21,7 +19,11 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 
-import java.util.Set;
+import com.google.common.collect.Sets;
+import com.kegare.bedrocklayer.core.Config;
+
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class BedrockEventHooks
 {

@@ -10,12 +10,14 @@
 
 package com.kegare.bedrocklayer.core;
 
-import com.kegare.bedrocklayer.util.BedrockLog;
-import cpw.mods.fml.common.Loader;
+import java.io.File;
+
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
-import java.io.File;
+import com.kegare.bedrocklayer.util.BedrockLog;
+
+import cpw.mods.fml.common.Loader;
 
 public class Config
 {

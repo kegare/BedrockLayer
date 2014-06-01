@@ -10,15 +10,15 @@
 
 package com.kegare.bedrocklayer.util;
 
-import cpw.mods.fml.relauncher.FMLLaunchHandler;
+import java.util.Locale;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
 
-import java.util.Locale;
+import cpw.mods.fml.relauncher.FMLLaunchHandler;
 
-@SuppressWarnings("static-access")
 public class BedrockLog
 {
 	public static final BedrockLog log = new BedrockLog();
