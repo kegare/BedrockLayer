@@ -4,8 +4,7 @@
  * Copyright (c) 2014 kegare
  * https://github.com/kegare
  *
- * This mod is distributed under the terms of the Minecraft Mod Public License 1.0, or MMPL.
- * Please check the contents of the license located in http://www.mod-buildcraft.com/MMPL-1.0.txt
+ * This mod is distributed under the terms of the Minecraft Mod Public License Japanese Translation, or MMPL_J.
  */
 
 package com.kegare.bedrocklayer.handler;
@@ -20,16 +19,32 @@ import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 
 import com.google.common.collect.Sets;
+import com.kegare.bedrocklayer.core.BedrockLayer;
 import com.kegare.bedrocklayer.core.Config;
 
+import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BedrockEventHooks
 {
+	public static final BedrockEventHooks instance = new BedrockEventHooks();
+
 	public static final Set<Long> layeredChunks = Sets.newHashSet();
 
-	@SubscribeEvent(priority = EventPriority.HIGH)
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void onConfigChanged(ConfigChangedEvent event)
+	{
+		if (event.modID.equals(BedrockLayer.MODID))
+		{
+			Config.syncConfig();
+		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onChunkLoad(ChunkEvent.Load event)
 	{
 		World world = event.world;
@@ -42,7 +57,7 @@ public class BedrockEventHooks
 		Chunk chunk = event.getChunk();
 		long chunkSeed = ChunkCoordIntPair.chunkXZ2Int(chunk.xPosition, chunk.zPosition) ^ world.provider.dimensionId;
 
-		if (!world.isRemote && chunk.isChunkLoaded && (!Config.useLayeredCache || !layeredChunks.contains(chunkSeed)))
+		if (chunk.isChunkLoaded && (!Config.useLayeredCache || !layeredChunks.contains(chunkSeed)))
 		{
 			if (Config.overworld && world.provider.dimensionId == 0)
 			{
@@ -86,8 +101,7 @@ public class BedrockEventHooks
 				}
 			}
 
-
-			if (Config.twilightforest && world.provider.getDimensionName().equals("Twilight Forest"))
+			if (Config.twilightforest && Config.dimensionTwilightforest != 0 && world.provider.dimensionId == Config.dimensionTwilightforest)
 			{
 				for (int x = 0; x < 16; ++x)
 				{
@@ -108,8 +122,8 @@ public class BedrockEventHooks
 		}
 	}
 
-	@SubscribeEvent(priority = EventPriority.HIGH)
-	public void onPostPopulateChunk(PopulateChunkEvent.Post event)
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void onPrePopulateChunk(PopulateChunkEvent.Pre event)
 	{
 		World world = event.world;
 
@@ -120,7 +134,7 @@ public class BedrockEventHooks
 
 		Chunk chunk = world.getChunkFromChunkCoords(event.chunkX, event.chunkZ);
 
-		if (!world.isRemote && chunk.isChunkLoaded)
+		if (chunk.isChunkLoaded)
 		{
 			if (Config.overworld && world.provider.dimensionId == 0)
 			{

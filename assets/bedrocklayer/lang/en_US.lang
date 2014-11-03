@@ -1,0 +1,17 @@
+# Localization file : en_US
+
+bedrocklayer.config.title=BedrockLayer Configuration
+bedrocklayer.config.general.flattenType=Flatten Type
+bedrocklayer.config.general.flattenType.tooltip=Specify the flatten uneven bedrock layers type.
+bedrocklayer.config.general.flattenType.0=When chunk loading
+bedrocklayer.config.general.flattenType.1=When chunk generating
+bedrocklayer.config.general.useLayeredCache=Flatted Layers Cache
+bedrocklayer.config.general.useLayeredCache.tooltip=Whether or not to use flatted layers cache.
+bedrocklayer.config.bedrocklayer.overworld=Overworld
+bedrocklayer.config.bedrocklayer.overworld.tooltip=Whether or not to flatten uneven bedrock layers of Overworld.
+bedrocklayer.config.bedrocklayer.netherUpper=Nether Upper
+bedrocklayer.config.bedrocklayer.netherUpper.tooltip=Whether or not to flatten uneven upper bedrock layers of Nether.
+bedrocklayer.config.bedrocklayer.netherLower=Nether Lower
+bedrocklayer.config.bedrocklayer.netherLower.tooltip=Whether or not to flatten uneven lower bedrock layers of Nether.
+bedrocklayer.config.bedrocklayer.twilightforest=Twilight Forest
+bedrocklayer.config.bedrocklayer.twilightforest.tooltip=Whether or not to flatten uneven bedrock layers of Twilight Forest.

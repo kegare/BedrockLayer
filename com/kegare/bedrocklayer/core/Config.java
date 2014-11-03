@@ -4,109 +4,143 @@
  * Copyright (c) 2014 kegare
  * https://github.com/kegare
  *
- * This mod is distributed under the terms of the Minecraft Mod Public License 1.0, or MMPL.
- * Please check the contents of the license located in http://www.mod-buildcraft.com/MMPL-1.0.txt
+ * This mod is distributed under the terms of the Minecraft Mod Public License Japanese Translation, or MMPL_J.
  */
 
 package com.kegare.bedrocklayer.core;
 
 import java.io.File;
+import java.util.List;
 
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
+import org.apache.logging.log4j.Level;
+
+import com.google.common.collect.Lists;
 import com.kegare.bedrocklayer.util.BedrockLog;
 
+import cpw.mods.fml.client.config.GuiConfigEntries.IConfigEntry;
 import cpw.mods.fml.common.Loader;
 
 public class Config
 {
+	public static Configuration config;
+
 	public static boolean overworld;
 	public static boolean netherUpper;
 	public static boolean netherLower;
 	public static boolean twilightforest;
+	public static int dimensionTwilightforest;
 
-	public static int flattenType = 0;
-	public static boolean useLayeredCache = true;
+	public static int flattenType;
+	public static boolean useLayeredCache;
 
-	static void buildConfig()
+	public static Class<? extends IConfigEntry> cycleInteger;
+
+	public static void syncConfig()
 	{
-		File file = new File(Loader.instance().getConfigDir(), "BedrockLayer.cfg");
-		Configuration config = new Configuration(file);
-
-		try
+		if (config == null)
 		{
-			config.load();
+			File file = new File(Loader.instance().getConfigDir(), "BedrockLayer.cfg");
+			config = new Configuration(file);
 
-			config.addCustomCategoryComment
-			(
-				"bedrocklayer",
-				"If multiplayer, server-side only."
-			);
-			config.addCustomCategoryComment
-			(
-				"advanced",
-				"You don't need to change this category settings normally." + Configuration.NEW_LINE +
-				"If multiplayer, server-side only."
-			);
-
-			String category = "bedrocklayer";
-			Property prop;
-
-			prop = config.get(category, "overworld", true);
-			prop.comment = "Flatten uneven bedrock layers of the Overworld. [true/false]";
-			overworld = prop.getBoolean(false);
-			prop = config.get(category, "netherUpper", true);
-			prop.comment = "Flatten uneven upper bedrock layers of the Nether. [true/false]";
-			netherUpper = prop.getBoolean(false);
-			prop = config.get(category, "netherLower", true);
-			prop.comment = "Flatten uneven lower bedrock layers of the Nether. [true/false]";
-			netherLower = prop.getBoolean(false);
-
-			if (Loader.isModLoaded("TwilightForest"))
+			try
 			{
-				prop = config.get(category, "twilightforest", false);
-				prop.comment = "Flatten uneven bedrock layers of the Twilight Forest. [true/false]";
-				twilightforest = prop.getBoolean(false);
+				config.load();
 			}
-
-			category = "advanced";
-
-			prop = config.get(category, "flattenType", 0);
-			prop.comment = "Specify the flatten type. [0-1]";
-			prop.comment += Configuration.NEW_LINE;
-			prop.comment += "0=Flatten uneven bedrock layers when loading chunk, ";
-			prop.comment += "1=Flatten uneven bedrock layers when generating chunk";
-			flattenType = prop.getInt();
-
-			if (flattenType < 0 || flattenType > 1)
+			catch (Exception e)
 			{
-				prop.set(0);
-			}
+				File dest = new File(file.getParentFile(), file.getName() + ".bak");
 
-			prop = config.get(category, "useLayeredCache", true);
-			prop.comment = "Flatten more efficiently using layered chunks cache. [true/false]";
-			useLayeredCache = prop.getBoolean(true);
+				if (dest.exists())
+				{
+					dest.delete();
+				}
+
+				file.renameTo(dest);
+
+				BedrockLog.log(Level.ERROR, e, "A critical error occured reading the " + file.getName() + " file, defaults will be used - the invalid file is backed up at " + dest.getName());
+			}
 		}
-		catch (Exception e)
+
+		String category = Configuration.CATEGORY_GENERAL;
+		Property prop;
+		List<String> propOrder = Lists.newArrayList();
+
+		prop = config.get(category, "flattenType", 0);
+		prop.setMinValue(0).setMaxValue(1).setLanguageKey(BedrockLayer.CONFIG_LANG + category + "." + prop.getName()).setConfigEntryClass(cycleInteger);
+		prop.comment = StatCollector.translateToLocal(prop.getLanguageKey() + ".tooltip");
+		prop.comment += " [range: " + prop.getMinValue() + " ~ " + prop.getMaxValue() + ", default: " + prop.getDefault() + "]";
+		propOrder.add(prop.getName());
+		flattenType = MathHelper.clamp_int(prop.getInt(flattenType), Integer.parseInt(prop.getMinValue()), Integer.parseInt(prop.getMaxValue()));
+
+		if (flattenType < 0 || flattenType > 1)
 		{
-			File dest = new File(file.getParentFile(), file.getName() + ".bak");
+			flattenType = 0;
 
-			if (dest.exists())
-			{
-				dest.delete();
-			}
-
-			file.renameTo(dest);
-
-			BedrockLog.severe("A critical error occured reading the " + file.getName() + " file, defaults will be used - the invalid file is backed up at " + dest.getName(), e);
+			prop.set(flattenType);
 		}
-		finally
+
+		prop = config.get(category, "useLayeredCache", true);
+		prop.setLanguageKey(BedrockLayer.CONFIG_LANG + category + "." + prop.getName());
+		prop.comment = StatCollector.translateToLocal(prop.getLanguageKey() + ".tooltip");
+		prop.comment += " [default: " + prop.getDefault() + "]";
+		propOrder.add(prop.getName());
+		useLayeredCache = prop.getBoolean(useLayeredCache);
+
+		config.setCategoryPropertyOrder(category, propOrder);
+
+		category = "bedrocklayer";
+		prop = config.get(category, "overworld", true);
+		prop.setLanguageKey(BedrockLayer.CONFIG_LANG + category + "." + prop.getName());
+		prop.comment = StatCollector.translateToLocal(prop.getLanguageKey() + ".tooltip");
+		prop.comment += " [default: " + prop.getDefault() + "]";
+		propOrder.add(prop.getName());
+		overworld = prop.getBoolean(overworld);
+		prop = config.get(category, "netherUpper", true);
+		prop.setLanguageKey(BedrockLayer.CONFIG_LANG + category + "." + prop.getName());
+		prop.comment = StatCollector.translateToLocal(prop.getLanguageKey() + ".tooltip");
+		prop.comment += " [default: " + prop.getDefault() + "]";
+		propOrder.add(prop.getName());
+		netherUpper = prop.getBoolean(netherUpper);
+		prop = config.get(category, "netherLower", true);
+		prop.setLanguageKey(BedrockLayer.CONFIG_LANG + category + "." + prop.getName());
+		prop.comment = StatCollector.translateToLocal(prop.getLanguageKey() + ".tooltip");
+		prop.comment += " [default: " + prop.getDefault() + "]";
+		propOrder.add(prop.getName());
+		netherLower = prop.getBoolean(netherLower);
+
+		if (Loader.isModLoaded("TwilightForest"))
 		{
-			if (config.hasChanged())
+			prop = config.get(category, "twilightforest", false);
+			prop.setLanguageKey(BedrockLayer.CONFIG_LANG + category + "." + prop.getName());
+			prop.comment = StatCollector.translateToLocal(prop.getLanguageKey() + ".tooltip");
+			prop.comment += " [default: " + prop.getDefault() + "]";
+			propOrder.add(prop.getName());
+			twilightforest = prop.getBoolean(twilightforest);
+
+			File file = new File(Loader.instance().getConfigDir(), "TwilightForest.cfg");
+
+			if (file.exists() && file.canRead())
 			{
-				config.save();
+				Configuration cfg = new Configuration(file);
+				Property p = cfg.getCategory("dimension").get("dimensionID");
+
+				if (p != null && p.isIntValue())
+				{
+					dimensionTwilightforest = p.getInt();
+				}
 			}
+		}
+
+		config.setCategoryPropertyOrder(category, propOrder);
+
+		if (config.hasChanged())
+		{
+			config.save();
 		}
 	}
 }

@@ -1,0 +1,17 @@
+# Localization file : ja_JP
+
+bedrocklayer.config.title=BedrockLayerの設定
+bedrocklayer.config.general.flattenType=平坦化タイプ
+bedrocklayer.config.general.flattenType.tooltip=岩盤層の平坦化のタイプを指定します。
+bedrocklayer.config.general.flattenType.0=チャンク読み込み時に平坦化
+bedrocklayer.config.general.flattenType.1=チャンク生成時に平坦化
+bedrocklayer.config.general.useLayeredCache=平坦化したチャンクのキャッシュ
+bedrocklayer.config.general.useLayeredCache.tooltip=平坦化したチャンクをキャッシュに保持し、再度平坦化処理が実行されないようにします。
+bedrocklayer.config.bedrocklayer.overworld=オーバーワールド
+bedrocklayer.config.bedrocklayer.overworld.tooltip=オーバーワールドの岩盤層を平坦にします。
+bedrocklayer.config.bedrocklayer.netherUpper=ネザーの最上層
+bedrocklayer.config.bedrocklayer.netherUpper.tooltip=ネザーの最上層の岩盤層を平坦にします。
+bedrocklayer.config.bedrocklayer.netherLower=ネザーの最下層
+bedrocklayer.config.bedrocklayer.netherLower.tooltip=ネザーの最下層の岩盤層を平坦にします。
+bedrocklayer.config.bedrocklayer.twilightforest=Twilight Forest
+bedrocklayer.config.bedrocklayer.twilightforest.tooltip=Twilight Forestの岩盤層を平坦にします。
