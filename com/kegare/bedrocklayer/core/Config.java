@@ -16,14 +16,13 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fml.client.config.GuiConfigEntries.IConfigEntry;
+import net.minecraftforge.fml.common.Loader;
 
 import org.apache.logging.log4j.Level;
 
 import com.google.common.collect.Lists;
 import com.kegare.bedrocklayer.util.BedrockLog;
-
-import cpw.mods.fml.client.config.GuiConfigEntries.IConfigEntry;
-import cpw.mods.fml.common.Loader;
 
 public class Config
 {
@@ -32,8 +31,6 @@ public class Config
 	public static boolean overworld;
 	public static boolean netherUpper;
 	public static boolean netherLower;
-	public static boolean twilightforest;
-	public static int dimensionTwilightforest;
 
 	public static int flattenType;
 	public static boolean useLayeredCache;
@@ -112,29 +109,6 @@ public class Config
 		prop.comment += " [default: " + prop.getDefault() + "]";
 		propOrder.add(prop.getName());
 		netherLower = prop.getBoolean(netherLower);
-
-		if (Loader.isModLoaded("TwilightForest"))
-		{
-			prop = config.get(category, "twilightforest", false);
-			prop.setLanguageKey(BedrockLayer.CONFIG_LANG + category + "." + prop.getName());
-			prop.comment = StatCollector.translateToLocal(prop.getLanguageKey() + ".tooltip");
-			prop.comment += " [default: " + prop.getDefault() + "]";
-			propOrder.add(prop.getName());
-			twilightforest = prop.getBoolean(twilightforest);
-
-			File file = new File(Loader.instance().getConfigDir(), "TwilightForest.cfg");
-
-			if (file.exists() && file.canRead())
-			{
-				Configuration cfg = new Configuration(file);
-				Property p = cfg.getCategory("dimension").get("dimensionID");
-
-				if (p != null && p.isIntValue())
-				{
-					dimensionTwilightforest = p.getInt();
-				}
-			}
-		}
 
 		config.setCategoryPropertyOrder(category, propOrder);
 

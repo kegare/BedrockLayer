@@ -11,12 +11,12 @@ package com.kegare.bedrocklayer.util;
 
 import java.util.Locale;
 
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
-
-import cpw.mods.fml.relauncher.FMLLaunchHandler;
 
 public class BedrockLog
 {

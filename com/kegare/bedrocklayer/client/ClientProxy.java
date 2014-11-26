@@ -9,12 +9,12 @@
 
 package com.kegare.bedrocklayer.client;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import com.kegare.bedrocklayer.client.config.CycleIntegerEntry;
 import com.kegare.bedrocklayer.core.CommonProxy;
 import com.kegare.bedrocklayer.core.Config;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy
