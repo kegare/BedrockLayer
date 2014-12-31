@@ -22,15 +22,12 @@ import net.minecraftforge.fml.common.Loader;
 import org.apache.logging.log4j.Level;
 
 import com.google.common.collect.Lists;
+import com.kegare.bedrocklayer.handler.BedrockEventHooks;
 import com.kegare.bedrocklayer.util.BedrockLog;
 
 public class Config
 {
 	public static Configuration config;
-
-	public static boolean overworld;
-	public static boolean netherUpper;
-	public static boolean netherLower;
 
 	public static int flattenType;
 	public static boolean useLayeredCache;
@@ -91,24 +88,19 @@ public class Config
 		config.setCategoryPropertyOrder(category, propOrder);
 
 		category = "bedrocklayer";
-		prop = config.get(category, "overworld", true);
-		prop.setLanguageKey(BedrockLayer.CONFIG_LANG + category + "." + prop.getName());
-		prop.comment = StatCollector.translateToLocal(prop.getLanguageKey() + ".tooltip");
-		prop.comment += " [default: " + prop.getDefault() + "]";
-		propOrder.add(prop.getName());
-		overworld = prop.getBoolean(overworld);
-		prop = config.get(category, "netherUpper", true);
-		prop.setLanguageKey(BedrockLayer.CONFIG_LANG + category + "." + prop.getName());
-		prop.comment = StatCollector.translateToLocal(prop.getLanguageKey() + ".tooltip");
-		prop.comment += " [default: " + prop.getDefault() + "]";
-		propOrder.add(prop.getName());
-		netherUpper = prop.getBoolean(netherUpper);
-		prop = config.get(category, "netherLower", true);
-		prop.setLanguageKey(BedrockLayer.CONFIG_LANG + category + "." + prop.getName());
-		prop.comment = StatCollector.translateToLocal(prop.getLanguageKey() + ".tooltip");
-		prop.comment += " [default: " + prop.getDefault() + "]";
-		propOrder.add(prop.getName());
-		netherLower = prop.getBoolean(netherLower);
+		propOrder = Lists.newArrayList();
+
+		for (FlattenEntry entry : BedrockEventHooks.flattenEntries)
+		{
+			prop = entry.getConfigProperty(config);
+
+			if (prop != null)
+			{
+				propOrder.add(prop.getName());
+
+				System.out.println(prop.getName());
+			}
+		}
 
 		config.setCategoryPropertyOrder(category, propOrder);
 

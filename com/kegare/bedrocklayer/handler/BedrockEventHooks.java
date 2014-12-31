@@ -11,32 +11,34 @@ package com.kegare.bedrocklayer.handler;
 
 import java.util.Set;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.config.Property;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.world.ChunkEvent;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.google.common.collect.Sets;
+import com.kegare.bedrocklayer.api.BedrockLayerAPI;
 import com.kegare.bedrocklayer.core.BedrockLayer;
 import com.kegare.bedrocklayer.core.Config;
+import com.kegare.bedrocklayer.core.FlattenEntry;
 
 public class BedrockEventHooks
 {
 	public static final BedrockEventHooks instance = new BedrockEventHooks();
 
+	public static final Set<FlattenEntry> flattenEntries = Sets.newLinkedHashSet();
 	public static final Set<Long> layeredChunks = Sets.newHashSet();
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
-	public void onConfigChanged(ConfigChangedEvent event)
+	public void onConfigChanged(OnConfigChangedEvent event)
 	{
 		if (event.modID.equals(BedrockLayer.MODID))
 		{
@@ -59,49 +61,20 @@ public class BedrockEventHooks
 
 		if (chunk.isLoaded() && (!Config.useLayeredCache || !layeredChunks.contains(chunkSeed)))
 		{
-			if (Config.overworld && world.provider.getDimensionId() == 0)
+			for (FlattenEntry entry : flattenEntries)
 			{
-				for (int x = 0; x < 16; ++x)
+				Property prop = entry.getConfigProperty(BedrockLayerAPI.getConfig());
+
+				if (prop == null || !prop.isBooleanValue() || prop.getBoolean())
 				{
-					for (int z = 0; z < 16; ++z)
-					{
-						for (int y = 1; chunk.getBlock(x, 0, z) == Blocks.bedrock && y < 5; ++y)
-						{
-							if (chunk.getBlock(x, y, z) == Blocks.bedrock)
-							{
-								chunk.setBlockState(new BlockPos(x, y, z), Blocks.stone.getDefaultState());
-							}
-						}
-					}
+					entry.flatten(chunk);
 				}
 			}
 
-			if ((Config.netherUpper || Config.netherLower) && world.provider.getDimensionId() == -1)
+			if (Config.useLayeredCache)
 			{
-				for (int x = 0; x < 16; ++x)
-				{
-					for (int z = 0; z < 16; ++z)
-					{
-						for (int y = 126; Config.netherUpper && chunk.getBlock(x, 127, z) == Blocks.bedrock && y > 122; --y)
-						{
-							if (chunk.getBlock(x, y, z) == Blocks.bedrock)
-							{
-								chunk.setBlockState(new BlockPos(x, y, z), Blocks.netherrack.getDefaultState());
-							}
-						}
-
-						for (int y = 1; Config.netherLower && chunk.getBlock(x, 0, z) == Blocks.bedrock && y < 5; ++y)
-						{
-							if (chunk.getBlock(x, y, z) == Blocks.bedrock)
-							{
-								chunk.setBlockState(new BlockPos(x, y, z), Blocks.netherrack.getDefaultState());
-							}
-						}
-					}
-				}
+				layeredChunks.add(chunkSeed);
 			}
-
-			if (Config.useLayeredCache) layeredChunks.add(chunkSeed);
 		}
 	}
 
@@ -119,45 +92,13 @@ public class BedrockEventHooks
 
 		if (chunk.isLoaded())
 		{
-			if (Config.overworld && world.provider.getDimensionId() == 0)
+			for (FlattenEntry entry : flattenEntries)
 			{
-				for (int x = 0; x < 16; ++x)
-				{
-					for (int z = 0; z < 16; ++z)
-					{
-						for (int y = 1; chunk.getBlock(x, 0, z) == Blocks.bedrock && y < 5; ++y)
-						{
-							if (chunk.getBlock(x, y, z) == Blocks.bedrock)
-							{
-								chunk.setBlockState(new BlockPos(x, y, z), Blocks.stone.getDefaultState());
-							}
-						}
-					}
-				}
-			}
+				Property prop = entry.getConfigProperty(BedrockLayerAPI.getConfig());
 
-			if ((Config.netherUpper || Config.netherLower) && world.provider.getDimensionId() == -1)
-			{
-				for (int x = 0; x < 16; ++x)
+				if (prop == null || !prop.isBooleanValue() || prop.getBoolean())
 				{
-					for (int z = 0; z < 16; ++z)
-					{
-						for (int y = 126; Config.netherUpper && chunk.getBlock(x, 127, z) == Blocks.bedrock && y > 122; --y)
-						{
-							if (chunk.getBlock(x, y, z) == Blocks.bedrock)
-							{
-								chunk.setBlockState(new BlockPos(x, y, z), Blocks.netherrack.getDefaultState());
-							}
-						}
-
-						for (int y = 1; Config.netherLower && chunk.getBlock(x, 0, z) == Blocks.bedrock && y < 5; ++y)
-						{
-							if (chunk.getBlock(x, y, z) == Blocks.bedrock)
-							{
-								chunk.setBlockState(new BlockPos(x, y, z), Blocks.netherrack.getDefaultState());
-							}
-						}
-					}
+					entry.flatten(chunk);
 				}
 			}
 		}
