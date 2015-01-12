@@ -1,0 +1,17 @@
+﻿# Localization file : zh_CN
+
+bedrocklayer.config.title=BedrockLayer的配置
+bedrocklayer.config.general.flattenType=整平的方式
+bedrocklayer.config.general.flattenType.tooltip=指定将不平整基岩层整平的方式。
+bedrocklayer.config.general.flattenType.0=当区块载入时整平
+bedrocklayer.config.general.flattenType.1=当区块生成时整平
+bedrocklayer.config.general.useLayeredCache=已整平区块的缓存
+bedrocklayer.config.general.useLayeredCache.tooltip=是否保持已整平基岩区块状态，以避免重复进行整平处理。
+bedrocklayer.config.bedrocklayer.overworld=主世界
+bedrocklayer.config.bedrocklayer.overworld.tooltip=是否整平主世界的不平整基岩。
+bedrocklayer.config.bedrocklayer.netherUpper=下界的顶层
+bedrocklayer.config.bedrocklayer.netherUpper.tooltip=是否整平下界的顶层基岩。
+bedrocklayer.config.bedrocklayer.netherLower=下界的底层
+bedrocklayer.config.bedrocklayer.netherLower.tooltip=是否整平下界的底层基岩。
+bedrocklayer.config.bedrocklayer.twilightforest=暮色森林
+bedrocklayer.config.bedrocklayer.twilightforest.tooltip=是否整平暮色森林的不平整基岩。
