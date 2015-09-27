@@ -9,16 +9,18 @@
 
 package com.kegare.bedrocklayer.core;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.StatCollector;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
-
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 
 public class FlattenEntry
 {
@@ -80,25 +82,47 @@ public class FlattenEntry
 		return prop;
 	}
 
-	public boolean flatten(Chunk chunk)
+	public boolean flatten(final Chunk chunk)
 	{
-		if (chunk.getWorld().provider.getDimensionId() != dim)
+		World world = chunk.getWorld();
+
+		if (world.provider.getDimensionId() != dim)
 		{
 			return false;
 		}
 
-		for (int x = 0; x < 16; ++x)
+		if (world instanceof WorldServer)
 		{
-			for (int z = 0; z < 16; ++z)
-			{
-				for (int y = minHeight; y < maxHeight; ++y)
+			((WorldServer)world).addScheduledTask(
+				new Runnable()
 				{
-					if (chunk.getBlock(x, y, z) == Blocks.bedrock)
+					@Override
+					public void run()
 					{
-						chunk.setBlockState(new BlockPos(x, y, z), filler);
+						for (ExtendedBlockStorage storage : chunk.getBlockStorageArray())
+						{
+							if (storage != null)
+							{
+								for (int x = 0; x < 16; ++x)
+								{
+									for (int z = 0; z < 16; ++z)
+									{
+										for (int y = minHeight; y < maxHeight; ++y)
+										{
+											if (storage.get(x, y, z) == Blocks.bedrock.getDefaultState())
+											{
+												storage.set(x, y, z, filler);
+											}
+										}
+									}
+								}
+							}
+						}
+
+						chunk.setModified(true);
 					}
 				}
-			}
+			);
 		}
 
 		return true;
