@@ -1,20 +1,11 @@
-/*
- * BedrockLayer
- *
- * Copyright (c) 2014 kegare
- * https://github.com/kegare
- *
- * This mod is distributed under the terms of the Minecraft Mod Public License Japanese Translation, or MMPL_J.
- */
-
-package com.kegare.bedrocklayer.core;
+package bedrocklayer.core;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -75,9 +66,8 @@ public class FlattenEntry
 		}
 
 		Property prop = config.get("bedrocklayer", configName, configDefault);
-		prop.setLanguageKey(BedrockLayer.CONFIG_LANG + prop.getName());
-		prop.comment = StatCollector.translateToLocal(prop.getLanguageKey() + ".tooltip");
-		prop.comment += " [default: " + prop.getDefault() + "]";
+		prop.setLanguageKey(Config.LANG_KEY + prop.getName());
+		prop.setComment(I18n.translateToLocal(prop.getLanguageKey() + ".tooltip") + " [default: " + prop.getDefault() + "]");
 
 		return prop;
 	}
@@ -86,7 +76,7 @@ public class FlattenEntry
 	{
 		World world = chunk.getWorld();
 
-		if (world.provider.getDimensionId() != dim)
+		if (world.provider.getDimension() != dim)
 		{
 			return false;
 		}

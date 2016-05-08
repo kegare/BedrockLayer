@@ -13,5 +13,3 @@ bedrocklayer.config.netherUpper=Nether Upper
 bedrocklayer.config.netherUpper.tooltip=Whether or not to flatten uneven upper bedrock layers of Nether.
 bedrocklayer.config.netherLower=Nether Lower
 bedrocklayer.config.netherLower.tooltip=Whether or not to flatten uneven lower bedrock layers of Nether.
-bedrocklayer.config.twilightforest=Twilight Forest
-bedrocklayer.config.twilightforest.tooltip=Whether or not to flatten uneven bedrock layers of Twilight Forest.

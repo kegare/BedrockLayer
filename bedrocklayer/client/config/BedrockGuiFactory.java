@@ -1,21 +1,10 @@
-/*
- * BedrockLayer
- *
- * Copyright (c) 2014 kegare
- * https://github.com/kegare
- *
- * This mod is distributed under the terms of the Minecraft Mod Public License Japanese Translation, or MMPL_J.
- */
-
-package com.kegare.bedrocklayer.client.config;
+package bedrocklayer.client.config;
 
 import java.util.Set;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.client.IModGuiFactory;
-import net.minecraftforge.fml.client.IModGuiFactory.RuntimeOptionCategoryElement;
-import net.minecraftforge.fml.client.IModGuiFactory.RuntimeOptionGuiHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

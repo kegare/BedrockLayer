@@ -1,13 +1,6 @@
-/*
- * BedrockLayer
- *
- * Copyright (c) 2014 kegare
- * https://github.com/kegare
- *
- * This mod is distributed under the terms of the Minecraft Mod Public License Japanese Translation, or MMPL_J.
- */
+package bedrocklayer.client.config;
 
-package com.kegare.bedrocklayer.client.config;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.client.config.GuiConfig;
@@ -16,8 +9,6 @@ import net.minecraftforge.fml.client.config.GuiConfigEntries.ButtonEntry;
 import net.minecraftforge.fml.client.config.IConfigElement;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import org.apache.commons.lang3.math.NumberUtils;
 
 @SideOnly(Side.CLIENT)
 public class CycleIntegerEntry extends ButtonEntry

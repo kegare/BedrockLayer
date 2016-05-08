@@ -1,32 +1,14 @@
-/*
- * BedrockLayer
- *
- * Copyright (c) 2014 kegare
- * https://github.com/kegare
- *
- * This mod is distributed under the terms of the Minecraft Mod Public License Japanese Translation, or MMPL_J.
- */
-
-package com.kegare.bedrocklayer.handler;
+package bedrocklayer.handler;
 
 import java.util.Iterator;
 
+import bedrocklayer.api.IBedrockLayerAPI;
+import bedrocklayer.core.FlattenEntry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.config.Configuration;
-
-import com.kegare.bedrocklayer.api.IBedrockLayerAPI;
-import com.kegare.bedrocklayer.core.Config;
-import com.kegare.bedrocklayer.core.FlattenEntry;
 
 public class BedrockLayerAPIHandler implements IBedrockLayerAPI
 {
-	@Override
-	public Configuration getConfig()
-	{
-		return Config.config;
-	}
-
 	@Override
 	public void registerFlatten(int dim, int min, int max, IBlockState filler)
 	{

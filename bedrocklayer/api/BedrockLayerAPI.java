@@ -1,8 +1,7 @@
-package com.kegare.bedrocklayer.api;
+package bedrocklayer.api;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.config.Configuration;
 
 /**
  * NOTE: Do NOT access to this class fields.
@@ -13,11 +12,6 @@ public final class BedrockLayerAPI
 	public static IBedrockLayerAPI instance;
 
 	private BedrockLayerAPI() {}
-
-	public static Configuration getConfig()
-	{
-		return instance == null ? null : instance.getConfig();
-	}
 
 	public static void registerFlatten(int dim, int min, int max, IBlockState filler)
 	{

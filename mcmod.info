@@ -2,13 +2,13 @@
   "modListVersion": 2,
   "modList": [
     {
-      "modid": "kegare.bedrocklayer",
+      "modid": "bedrocklayer",
       "name": "BedrockLayer",
       "description": "Flatten uneven bedrock layers.",
       "url": "http://forum.minecraftuser.jp/viewtopic.php?t=13399",
       "updateUrl": "",
       "logoFile": "logo.png",
-      "version": "1.1.1",
+      "version": "1.2.0",
       "credits": "By kegare",
       "parent": "",
       "authorList": [

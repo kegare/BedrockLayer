@@ -13,5 +13,3 @@ bedrocklayer.config.netherUpper=ネザーの最上層
 bedrocklayer.config.netherUpper.tooltip=ネザーの最上層の岩盤層を平坦にします。
 bedrocklayer.config.netherLower=ネザーの最下層
 bedrocklayer.config.netherLower.tooltip=ネザーの最下層の岩盤層を平坦にします。
-bedrocklayer.config.twilightforest=Twilight Forest
-bedrocklayer.config.twilightforest.tooltip=Twilight Forestの岩盤層を平坦にします。
