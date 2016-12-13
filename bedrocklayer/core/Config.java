@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Level;
 
 import com.google.common.collect.Lists;
 
+import bedrocklayer.client.config.CycleIntegerEntry;
 import bedrocklayer.handler.BedrockEventHooks;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.translation.I18n;
@@ -15,6 +16,8 @@ import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.config.GuiConfigEntries.IConfigEntry;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class Config
 {
@@ -26,6 +29,12 @@ public class Config
 	public static Class<? extends IConfigEntry> cycleInteger;
 
 	public static final String LANG_KEY = "bedrocklayer.config.";
+
+	@SideOnly(Side.CLIENT)
+	public static void initializeConfigEntries()
+	{
+		cycleInteger = CycleIntegerEntry.class;
+	}
 
 	public static void syncConfig()
 	{
@@ -79,7 +88,7 @@ public class Config
 
 		prop.setComment(comment);
 		propOrder.add(prop.getName());
-		flattenType = MathHelper.clamp_int(prop.getInt(flattenType), min, max);
+		flattenType = MathHelper.clamp(prop.getInt(flattenType), min, max);
 
 		prop = config.get(category, "useLayeredCache", true);
 		prop.setLanguageKey(LANG_KEY + category + "." + prop.getName());
@@ -94,7 +103,7 @@ public class Config
 		category = "bedrocklayer";
 		propOrder = Lists.newArrayList();
 
-		for (FlattenEntry entry : BedrockEventHooks.flattenEntries)
+		for (FlattenEntry entry : BedrockEventHooks.ENTRIES)
 		{
 			prop = entry.getConfigProperty(config);
 

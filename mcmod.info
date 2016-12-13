@@ -5,18 +5,16 @@
       "modid": "bedrocklayer",
       "name": "BedrockLayer",
       "description": "Flatten uneven bedrock layers.",
-      "url": "http://forum.minecraftuser.jp/viewtopic.php?t=13399",
+      "url": "http://kegare.github.io",
       "updateUrl": "",
       "logoFile": "logo.png",
-      "version": "1.2.0",
-      "credits": "By kegare",
+      "version": "1.2.2",
+      "credits": "Authored by kegare",
       "parent": "",
       "authorList": [
         "kegare"
       ],
-      "requiredMods": [
-        "Forge"
-      ],
+      "requiredMods": [],
       "dependencies": [],
       "dependants": [],
       "useDependencyInformation": "true"

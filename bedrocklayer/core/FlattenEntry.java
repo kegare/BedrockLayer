@@ -99,7 +99,7 @@ public class FlattenEntry
 									{
 										for (int y = minHeight; y < maxHeight; ++y)
 										{
-											if (storage.get(x, y, z) == Blocks.bedrock.getDefaultState())
+											if (storage.get(x, y, z) == Blocks.BEDROCK.getDefaultState())
 											{
 												storage.set(x, y, z, filler);
 											}

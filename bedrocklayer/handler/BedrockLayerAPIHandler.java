@@ -12,13 +12,13 @@ public class BedrockLayerAPIHandler implements IBedrockLayerAPI
 	@Override
 	public void registerFlatten(int dim, int min, int max, IBlockState filler)
 	{
-		BedrockEventHooks.flattenEntries.add(new FlattenEntry(dim, min, max, filler));
+		BedrockEventHooks.ENTRIES.add(new FlattenEntry(dim, min, max, filler));
 	}
 
 	@Override
 	public void registerFlatten(int dim, int min, int max, IBlockState filler, String configName, boolean configDefault)
 	{
-		BedrockEventHooks.flattenEntries.add(new FlattenEntry(dim, min, max, filler).setConfig(configName, configDefault));
+		BedrockEventHooks.ENTRIES.add(new FlattenEntry(dim, min, max, filler).setConfig(configName, configDefault));
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public class BedrockLayerAPIHandler implements IBedrockLayerAPI
 	{
 		boolean flag = false;
 
-		for (Iterator<FlattenEntry> iterator = BedrockEventHooks.flattenEntries.iterator(); iterator.hasNext();)
+		for (Iterator<FlattenEntry> iterator = BedrockEventHooks.ENTRIES.iterator(); iterator.hasNext();)
 		{
 			if (iterator.next().dim == dim)
 			{
@@ -47,7 +47,7 @@ public class BedrockLayerAPIHandler implements IBedrockLayerAPI
 	{
 		boolean flag = false;
 
-		for (FlattenEntry entry : BedrockEventHooks.flattenEntries)
+		for (FlattenEntry entry : BedrockEventHooks.ENTRIES)
 		{
 			if (entry.flatten(chunk) && !flag)
 			{

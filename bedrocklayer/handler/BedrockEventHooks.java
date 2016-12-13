@@ -7,7 +7,7 @@ import com.google.common.collect.Sets;
 import bedrocklayer.core.BedrockLayer;
 import bedrocklayer.core.Config;
 import bedrocklayer.core.FlattenEntry;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.config.Property;
@@ -21,8 +21,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BedrockEventHooks
 {
-	public static final Set<FlattenEntry> flattenEntries = Sets.newLinkedHashSet();
-	public static final Set<Long> layeredChunks = Sets.newHashSet();
+	public static final Set<FlattenEntry> ENTRIES = Sets.newLinkedHashSet();
+	public static final Set<Long> LAYERED_CHUNKS = Sets.newHashSet();
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
@@ -45,11 +45,11 @@ public class BedrockEventHooks
 		}
 
 		Chunk chunk = event.getChunk();
-		long chunkSeed = ChunkCoordIntPair.chunkXZ2Int(chunk.xPosition, chunk.zPosition) ^ world.provider.getDimension();
+		long chunkSeed = ChunkPos.asLong(chunk.xPosition, chunk.zPosition) ^ world.provider.getDimension();
 
-		if (chunk.isLoaded() && (!Config.useLayeredCache || !layeredChunks.contains(chunkSeed)))
+		if (chunk.isLoaded() && (!Config.useLayeredCache || !LAYERED_CHUNKS.contains(chunkSeed)))
 		{
-			for (FlattenEntry entry : flattenEntries)
+			for (FlattenEntry entry : ENTRIES)
 			{
 				Property prop = entry.getConfigProperty(Config.config);
 
@@ -61,7 +61,7 @@ public class BedrockEventHooks
 
 			if (Config.useLayeredCache)
 			{
-				layeredChunks.add(chunkSeed);
+				LAYERED_CHUNKS.add(chunkSeed);
 			}
 		}
 	}
@@ -80,7 +80,7 @@ public class BedrockEventHooks
 
 		if (chunk.isLoaded())
 		{
-			for (FlattenEntry entry : flattenEntries)
+			for (FlattenEntry entry : ENTRIES)
 			{
 				Property prop = entry.getConfigProperty(Config.config);
 
