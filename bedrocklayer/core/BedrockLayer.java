@@ -17,7 +17,12 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkCheckHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = BedrockLayer.MODID, guiFactory = "bedrocklayer.client.config.BedrockGuiFactory")
+@Mod
+(
+	modid = BedrockLayer.MODID,
+	guiFactory = "bedrocklayer.client.config.BedrockGuiFactory",
+	acceptedMinecraftVersions = "[1.11.2,)"
+)
 public class BedrockLayer
 {
 	public static final String MODID = "bedrocklayer";

@@ -7,7 +7,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraftforge.common.config.Configuration;
@@ -72,7 +71,15 @@ public class FlattenEntry
 		return prop;
 	}
 
-	public boolean flatten(final Chunk chunk)
+	protected boolean isTargetSector(int ySector)
+	{
+		int minSector = (int)Math.floor(minHeight / 16.0D);
+		int maxSector = (int)Math.floor(maxHeight / 16.0D);
+
+		return ySector >= minSector && ySector <= maxSector;
+	}
+
+	public boolean flatten(Chunk chunk)
 	{
 		World world = chunk.getWorld();
 
@@ -81,38 +88,33 @@ public class FlattenEntry
 			return false;
 		}
 
-		if (world instanceof WorldServer)
+		for (ExtendedBlockStorage storage : chunk.getBlockStorageArray())
 		{
-			((WorldServer)world).addScheduledTask(
-				new Runnable()
+			if (storage != Chunk.NULL_BLOCK_STORAGE && !storage.isEmpty())
+			{
+				int yBase = storage.getYLocation();
+
+				if (isTargetSector((int)Math.floor(yBase / 16.0D)))
 				{
-					@Override
-					public void run()
+					for (int x = 0; x < 16; ++x)
 					{
-						for (ExtendedBlockStorage storage : chunk.getBlockStorageArray())
+						for (int z = 0; z < 16; ++z)
 						{
-							if (storage != null)
+							for (int y = minHeight; y < maxHeight; ++y)
 							{
-								for (int x = 0; x < 16; ++x)
+								int ry = y - yBase;
+
+								if (storage.get(x, ry, z) == Blocks.BEDROCK.getDefaultState())
 								{
-									for (int z = 0; z < 16; ++z)
-									{
-										for (int y = minHeight; y < maxHeight; ++y)
-										{
-											if (storage.get(x, y, z) == Blocks.BEDROCK.getDefaultState())
-											{
-												storage.set(x, y, z, filler);
-											}
-										}
-									}
+									storage.set(x, ry, z, filler);
 								}
 							}
 						}
-
-						chunk.setModified(true);
 					}
 				}
-			);
+
+				chunk.setModified(true);
+			}
 		}
 
 		return true;

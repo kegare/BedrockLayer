@@ -6,9 +6,9 @@
       "name": "BedrockLayer",
       "description": "Flatten uneven bedrock layers.",
       "url": "http://kegare.github.io",
-      "updateUrl": "",
+      "updateJSON": "",
       "logoFile": "logo.png",
-      "version": "1.2.2",
+      "version": "1.2.4",
       "credits": "Authored by kegare",
       "parent": "",
       "authorList": [
